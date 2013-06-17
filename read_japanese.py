@@ -64,6 +64,8 @@ def write_defs(k,t):
         output.write('\n\n')
     output.close()
 
-#page_read('jtext_small.txt')
-write_defs(page_read('jtext.txt'), 'test.txt')
+def demo():
+    write_defs(page_read('jtext_small.txt'), 'test.txt')
 
+if __name__ == '__main__':
+    demo()
