@@ -65,7 +65,7 @@ def write_defs(k,t):
     output.close()
 
 def demo():
-    write_defs(page_read('jtext_small.txt'), 'test.txt')
+    write_defs(page_read('./tests/sensei.txt'), '../test.txt')
 
 if __name__ == '__main__':
     demo()
