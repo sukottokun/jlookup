@@ -37,13 +37,15 @@ def page_read(text_in):
     kanji = {}
     t = codecs.open(text_in,encoding='UTF-8')
     all=t.readlines()
+    order = 0
 
     for line in all:
         text = (segmenter.tokenize(line))
         for tx in text:
-            if re.search(ur'[\u4e00-\u9FFF]',tx):
-                kanji[tx] = kanji_define(tx)
-                print ''.join(['"',tx.encode('utf-8'), '"を検索中'])
+            if re.search(ur'[\u4e00-\u9FFF]',tx) and tx not in kanji.keys():
+                kanji[tx] = [kanji_define(tx), order]
+                print ''.join([str(order),' "',tx.encode('utf-8'), '"を検索中'])
+                order += 1
     t.close()
     print ''
     print 'お待たせいたしました。'
@@ -55,11 +57,11 @@ def write_defs(k,t):
     '''
     output = open(t, 'w')
     for key, value in k.iteritems():
-        end = value.find('/(P)/')
+        end = value[0].find('/(P)/')
         if 'matches were found' in value:
             definition = 'none'
         else:
-            definition = value[29:end]
+            definition = value[0][29:end]
         output.write('Searched: ' + key.encode('utf-8'))
         output.write(' Found: ' + definition )
         output.write('\n\n')
