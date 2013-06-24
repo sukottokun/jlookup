@@ -43,8 +43,10 @@ def page_read(text_in):
         for tx in text:
             if re.search(ur'[\u4e00-\u9FFF]',tx):
                 kanji[tx] = kanji_define(tx)
-
+                print ''.join(['"',tx.encode('utf-8'), '"を検索中'])
     t.close()
+    print ''
+    print 'お待たせいたしました。'
     return kanji
 
 def write_defs(k,t):
@@ -65,7 +67,7 @@ def write_defs(k,t):
     output.close()
 
 def demo():
-    write_defs(page_read('./tests/sensei.txt'), '../test.txt')
+    write_defs(page_read('./tests/jtext_small.txt'), '../test.txt')
 
 if __name__ == '__main__':
     demo()
