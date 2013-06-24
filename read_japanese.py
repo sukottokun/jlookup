@@ -60,9 +60,8 @@ def write_defs(k,t):
             definition = 'none'
         else:
             definition = value[29:end]
-        output.write(key.encode('utf-8'))
-        output.write('\n')
-        output.write(definition)
+        output.write('Searched: ' + key.encode('utf-8'))
+        output.write(' Found: ' + definition )
         output.write('\n\n')
     output.close()
 
