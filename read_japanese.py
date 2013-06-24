@@ -58,7 +58,7 @@ def write_defs(k,t):
     output = open(t, 'w')
     for key, value in k.iteritems():
         end = value[0].find('/(P)/')
-        if 'matches were found' in value:
+        if 'matches were found' in value[0]:
             definition = 'none'
         else:
             definition = value[0][29:end]
