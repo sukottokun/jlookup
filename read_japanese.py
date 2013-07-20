@@ -62,13 +62,13 @@ def write_defs(k,t):
             definition = 'none'
         else:
             definition = value[0][29:end]
-        output.write('Searched: ' + key.encode('utf-8'))
-        output.write(' Found: ' + definition )
-        output.write('\n\n')
+        output.write(key.encode('utf-8'))
+        output.write('/' + definition )
+        output.write('\n')
     output.close()
 
 def demo():
-    write_defs(page_read('./tests/jtext_small.txt'), '../test.txt')
+    write_defs(page_read('./tests/jtext.txt'), '../test.txt')
 
 if __name__ == '__main__':
     demo()
