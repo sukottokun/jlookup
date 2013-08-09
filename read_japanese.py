@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import os
 import nltk
-from nltk.tokenize import RegexpTokenizer
-from nltk.tokenize import word_tokenize, wordpunct_tokenize, sent_tokenize
 import codecs
-import sys
 import re
-import requests
 import urllib
-import pprint
 from tinysegmenter import *
 
-''' Function to read all lines into dict'''
-segmenter = TinySegmenter() #read
+# Function to read all lines into dict
+segmenter = TinySegmenter()
 
 #for each list item, look up meaning
 def kanji_define(k):
-    ''' string -> string
+    """ string -> string
     gets a definition from a string (kanji)
-    '''
+    """
     base = 'http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?1ZUP' #lookup
     web_k = urllib.quote(k.encode('utf8'))
     params = [base, web_k]
@@ -30,33 +24,36 @@ def kanji_define(k):
     return clean
 
 def page_read(text_in):
-    ''' string ('file_name.txt') -> dict
+    """ string ('file_name.txt') -> dict
     Takes utf8 text file and parses kanji, loops through, defines,
     adds to dict
-    '''
+    """
     kanji = {}
     t = codecs.open(text_in,encoding='UTF-8')
     all=t.readlines()
-    order = 0
-
+    order = 1
     for line in all:
         text = (segmenter.tokenize(line))
         for tx in text:
             if re.search(ur'[\u4e00-\u9FFF]',tx) and tx not in kanji.keys():
-                kanji[tx] = [kanji_define(tx), order]
-                print ''.join([str(order),' "',tx.encode('utf-8'), '"を検索中'])
-                order += 1
+                question = ''.join(["Lookup ", tx.encode('utf-8'), "?\n"])
+                lookup = raw_input(question)
+                if lookup is 'y':
+                    print ''.join(['"',tx.encode('utf-8'), '"を検索中',])
+                    kanji[tx] = [kanji_define(tx), order]
+                    order += 1
     t.close()
     print ''
     print 'お待たせいたしました。'
     return kanji
 
 def write_defs(k,t):
-    ''' dict -> none
+    """ dict, output file name -> none
     Takes dict of words and defs and writes them to a text file
-    '''
+    """
     output = open(t, 'w')
-    for key, value in k.iteritems():
+    #for key, value in k.iteritems():
+    for key, value in sorted(k.iteritems(), key=lambda (k,v): (v,k)):
         end = value[0].find('/(P)/')
         if 'matches were found' in value[0]:
             definition = 'none'
