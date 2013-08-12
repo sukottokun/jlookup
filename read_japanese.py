@@ -4,9 +4,9 @@ import nltk
 import codecs
 import re
 import urllib
+import operator
 from tinysegmenter import *
 
-# TODO dupes are being returned
 # Function to read all lines into dict
 segmenter = TinySegmenter()
 
@@ -15,9 +15,9 @@ def page_read(text_in):
     Takes in text file and returns a unicode string
     """
     t = codecs.open(text_in,encoding='UTF-8')
-    all=t.read()
+    all_text=t.read()
     t.close()
-    return all
+    return all_text
 
 def tokenize(all_read):
     """ list -> dict
@@ -27,7 +27,8 @@ def tokenize(all_read):
     order = 1
     text = (segmenter.tokenize(all_read))
     for tx in text:
-        if re.search(ur'[\u4e00-\u9FFF]',tx) and tx not in kanji.keys(): # if in Kanji range (not hira/kata) and not already in dict
+        # if in Kanji range (not hira/kata) and not already in dict
+        if re.search(ur'[\u4e00-\u9FFF]',tx) and tx not in kanji.keys():
             kanji[tx] = order
             order += 1
     return kanji
@@ -78,7 +79,8 @@ def write_defs(k,t):
     TODO: still not sorted, is the original search term being captured any more?
     """
     output = open(t, 'w')
-    for k,v in k.iteritems():
+    #sorted_x = sorted(x.iteritems(), key=operator.itemgetter(1))
+    for k,v in sorted(k.iteritems(), key=lambda (k,v): (v,k)):
         output.write(k.encode('utf-8'))
         output.write('/' + v['definition'] )
         output.write('\n')
@@ -87,7 +89,6 @@ def write_defs(k,t):
 
 def demo():
     write_defs(look(ask(tokenize(page_read('./tests/jtext.txt')))), './tests/output.txt')
-   #page_read('./tests/jtext.txt')
 
 if __name__ == '__main__':
     demo()
