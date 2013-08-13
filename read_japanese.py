@@ -4,7 +4,6 @@ import nltk
 import codecs
 import re
 import urllib
-import operator
 from tinysegmenter import *
 
 # Function to read all lines into dict
@@ -37,12 +36,17 @@ def ask(all_found):
     """ dict -> dict
      takes all tokenized kanji and loops through, prompting user to lookup or not
     """
+    #TODO Skip all known kanji
     to_lookup = {}
     for k,v in all_found.iteritems():
         question = ''.join(["Lookup ", k.encode('utf-8'), "?\n"])
         need_lookup = raw_input(question)
         if need_lookup is 'y':
             to_lookup[k] = {'order':v}
+        elif need_lookup is 'n':
+            #TODO append to loaded list
+
+
     return to_lookup
 
 def look(l):
@@ -76,16 +80,35 @@ def condensed_def(definition):
 def write_defs(k,t):
     """ dict, output file name -> none
     Takes dict of words and defs and writes them to a text file
-    TODO: still not sorted, is the original search term being captured any more?
     """
     output = open(t, 'w')
-    #sorted_x = sorted(x.iteritems(), key=operator.itemgetter(1))
-    for k,v in sorted(k.iteritems(), key=lambda (k,v): (v,k)):
+    for k,v in sorted(k.iteritems(), key=lambda (k,v): v['order']):
         output.write(k.encode('utf-8'))
         output.write('/' + v['definition'] )
         output.write('\n')
     output.close()
     print 'お待たせいたしました。'
+
+def get_kanji_i_know():
+    """ none _> list
+    Loads a list of known words, so user can skip over them when selecting. Eliminates simple words.
+    """
+    t = codecs.open('./tests/known_kanji.txt',encoding='UTF-8')
+    known=t.readlines()
+    t.close()
+    return known
+
+def write_new_kanji_i_know(kanji):
+    """ list -> none
+    takes a list of new kanji and adds them to the text file of kanji the user knows.
+    """
+    output = open('./tests/known_kanji.txt', 'w')
+    for k in kanji:
+        output.write(k.encode('utf-8'))
+        output.write(k)
+        output.write('\n')
+    output.close()
+
 
 def demo():
     write_defs(look(ask(tokenize(page_read('./tests/jtext.txt')))), './tests/output.txt')
