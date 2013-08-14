@@ -32,21 +32,41 @@ def tokenize(all_read):
             order += 1
     return kanji
 
+def get_kanji_i_know():
+    """ none _> list
+    Loads a list of known words, so user can skip over them when selecting. Eliminates simple words.
+    """
+    t = codecs.open('./tests/known_kanji.txt',encoding='UTF-8')
+    known=t.readlines()
+    t.close()
+    return known
+
+def write_new_kanji_i_know(kanji):
+    """ list -> none
+    takes a list of new kanji and adds them to the text file of kanji the user knows.
+    """
+    output = open('./tests/known_kanji.txt', 'w+')
+    for k in kanji:
+        output.write(k.encode('utf-8'))
+        output.write('\n')
+    output.close()
+
 def ask(all_found):
     """ dict -> dict
      takes all tokenized kanji and loops through, prompting user to lookup or not
     """
-    #TODO Skip all known kanji
+    known = get_kanji_i_know()
+    new_known = []
     to_lookup = {}
     for k,v in all_found.iteritems():
-        question = ''.join(["Lookup ", k.encode('utf-8'), "?\n"])
-        need_lookup = raw_input(question)
-        if need_lookup is 'y':
-            to_lookup[k] = {'order':v}
-        elif need_lookup is 'n':
-            #TODO append to loaded list
-
-
+        if k not in known: # TODO not working
+            question = ''.join(["Lookup ", k.encode('utf-8'), "?\n"])
+            need_lookup = raw_input(question)
+            if need_lookup is 'y':
+                to_lookup[k] = {'order':v}
+            elif need_lookup is 'n':
+                new_known.append(k)
+    write_new_kanji_i_know(new_known)
     return to_lookup
 
 def look(l):
@@ -88,27 +108,6 @@ def write_defs(k,t):
         output.write('\n')
     output.close()
     print 'お待たせいたしました。'
-
-def get_kanji_i_know():
-    """ none _> list
-    Loads a list of known words, so user can skip over them when selecting. Eliminates simple words.
-    """
-    t = codecs.open('./tests/known_kanji.txt',encoding='UTF-8')
-    known=t.readlines()
-    t.close()
-    return known
-
-def write_new_kanji_i_know(kanji):
-    """ list -> none
-    takes a list of new kanji and adds them to the text file of kanji the user knows.
-    """
-    output = open('./tests/known_kanji.txt', 'w')
-    for k in kanji:
-        output.write(k.encode('utf-8'))
-        output.write(k)
-        output.write('\n')
-    output.close()
-
 
 def demo():
     write_defs(look(ask(tokenize(page_read('./tests/jtext.txt')))), './tests/output.txt')
