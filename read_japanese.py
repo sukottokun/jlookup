@@ -5,6 +5,7 @@ import codecs
 import re
 import urllib
 from tinysegmenter import *
+from time import sleep
 
 # Function to read all lines into dict
 segmenter = TinySegmenter()
@@ -16,6 +17,8 @@ def page_read(text_in):
     t = codecs.open(text_in,encoding='UTF-8')
     all_text=t.read()
     t.close()
+    print "File Read."
+    sleep(.5)
     return all_text
 
 def tokenize(all_read):
@@ -33,19 +36,22 @@ def tokenize(all_read):
     return kanji
 
 def get_kanji_i_know():
-    """ none _> list
+    """ none -> list
     Loads a list of known words, so user can skip over them when selecting. Eliminates simple words.
     """
-    t = codecs.open('./tests/known_kanji.txt',encoding='UTF-8')
-    known=t.readlines()
+    stripped = []
+    t = codecs.open('tests/known_kanji.txt',encoding='UTF-8')
+    known = t.readlines()
+    for k in known:
+        stripped.append(k.strip())
     t.close()
-    return known
+    return stripped
 
 def write_new_kanji_i_know(kanji):
     """ list -> none
     takes a list of new kanji and adds them to the text file of kanji the user knows.
     """
-    output = open('./tests/known_kanji.txt', 'w+')
+    output = open('tests/known_kanji.txt', 'a')
     for k in kanji:
         output.write(k.encode('utf-8'))
         output.write('\n')
@@ -58,8 +64,14 @@ def ask(all_found):
     known = get_kanji_i_know()
     new_known = []
     to_lookup = {}
+    print "Processing."
+    sleep(.5)
+
     for k,v in all_found.iteritems():
-        if k not in known: # TODO not working
+        if k in known:
+            print 'Known kanji: %s. Skipping.' % k
+            sleep(.5)
+        else:
             question = ''.join(["Lookup ", k.encode('utf-8'), "?\n"])
             need_lookup = raw_input(question)
             if need_lookup is 'y':
@@ -74,6 +86,8 @@ def look(l):
     gets a dict and looks up the word, adds the def to the dict
     """
     base = 'http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?1ZUP' #lookup
+    print "Beginning search..."
+    sleep(.5)
     for k,v in l.iteritems():
         print ''.join(['"',k.encode('utf-8'), '"を検索中',])
         web_k = urllib.quote(k.encode('utf8'))
@@ -101,6 +115,8 @@ def write_defs(k,t):
     """ dict, output file name -> none
     Takes dict of words and defs and writes them to a text file
     """
+    print "Writing."
+    sleep(.5)
     output = open(t, 'w')
     for k,v in sorted(k.iteritems(), key=lambda (k,v): v['order']):
         output.write(k.encode('utf-8'))
