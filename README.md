@@ -11,13 +11,23 @@ Pretty basic. At some point it might be nice to make furigana an option. But I p
 
 TODOS:
 [ ] Add goo, other alternative dictionaries: http://search.goo.ne.jp/web.jsp?MT=%s
+
 [ ] Return non-jisho kei verbs better
+
 [ ] Skip writing redundant exact matches
+
 [ ] Show total tokens, show token progress
+
 [ ] Tiny segmenter alternatives?
+
 [ ] Step forward and back while building the search list
+
 [ ] Lookup hiragana too
+
 [ ] Review, edit known kanji
+
 [ ] Maybe use a database, I heartell they are different than text files
+
 [ ] Read a word doc as input
+
 [ ] Maybe put on the web
