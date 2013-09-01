@@ -3,4 +3,4 @@
 tests*
 
 .idea*
-database_connect.py
+database_connect*
