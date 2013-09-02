@@ -1,15 +1,21 @@
 from database_connect import cnx
 
+"""
+http://dev.mysql.com/doc/connector-python/en/connector-python-example-ddl.html
+http://dev.mysql.com/doc/connector-python/en/connector-python-reference.html
+"""
+
 cursor = cnx.cursor()
 
-def add_employee():
-    data_employee = 51011
-    add_employee = "INSERT INTO t (c) VALUES (%d)" % data_employee
+def add_known(known_ji):
+    """
+    list->none
+    Takes the list of known kanji and inserts into database.
+    """
+    add_ji_query = "INSERT INTO known (ji) VALUES (%s)" % known_ji
+    for ji in known_ji:
+        cursor.execute(add_ji_query, ji)
 
-    # Insert new employee
-    cursor.execute(add_employee)
-
-    # Make sure data is committed to the database
     cnx.commit()
     cursor.close()
     cnx.close()
@@ -30,19 +36,4 @@ if __name__ == '__main__':
 
 
 '''
-http://dev.mysql.com/doc/connector-python/en/connector-python-example-ddl.html
-import MySQLdb
-db = MySQLdb.connect(host="localhost", user="stackoverflow", passwd="", db="stackoverflow")
-cursor = db.cursor()
-try:
-    sql = 'create table if not exists anzahlids( tweetid int ) ; '
-except:
-    #ignore
-    pass
-
-sql = ("""INSERT INTO anzahlids (tweetid) VALUES (%s)""")
-data = [1,2,3,4,5,6,7,8,9]
-length = [len(data)]
-cursor.executemany(sql,length)
-db.commit()
 '''
