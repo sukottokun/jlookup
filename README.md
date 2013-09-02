@@ -26,7 +26,7 @@ TODOS:
 
 [ ] Review, edit known kanji
 
-[ ] Maybe use a database, I heartell they are different than text files
+[ ] IN PROGRESS: Use a database, not a text files
 
 [ ] Read a word doc as input
 
