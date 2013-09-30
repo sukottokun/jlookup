@@ -1,39 +1,55 @@
-from database_connect import cnx
+# -*- coding: utf-8 -*-
+
+from database_connect import uname,pw,host,db
+import MySQLdb
+import mysql.connector
+from mysql.connector import errorcode
+
 
 """
 http://dev.mysql.com/doc/connector-python/en/connector-python-example-ddl.html
 http://dev.mysql.com/doc/connector-python/en/connector-python-reference.html
 """
-
-cursor = cnx.cursor()
-
 def add_known(known_ji):
     """
     list->none
     Takes the list of known kanji and inserts into database.
     """
-    add_ji_query = "INSERT INTO known (ji) VALUES (%s)" % known_ji
-    for ji in known_ji:
-        cursor.execute(add_ji_query, ji)
+    cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
+    cursor = cnx.cursor()
+    try:
+        for ji in known_ji:
+            add_ji_query = "INSERT INTO known (ji) VALUES ('%s')" % ji
+            cursor.execute(add_ji_query)
+            cnx.commit()
+    except:
+        print "Error: unable to fecth data"
+        cursor.close()
+        cnx.close()
 
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+def get_known():
+    cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
+    cursor = cnx.cursor()
+    k = []
+    ji_count = 0
+    query = "SELECT ji FROM known"
+    try:
+        cursor.execute(query)
+        for (c) in cursor:
+            k.append(c)
+            print c
+            ji_count += 1
+    except:
+        print "Error: unable to fetch data"
+        cursor.close()
+        cnx.close()
 
-def get_employee():
-    query = "SELECT c FROM t "
-    cursor.execute(query)
-    for (c) in cursor:
-        print("{} is not a number".format(c))
-    cursor.close()
-    cnx.close()
+    return k
 
 def demo():
-    get_employee()
+    add_known(['test10','test13'])
+    get_known()
 
 if __name__ == '__main__':
     demo()
 
-
-'''
-'''
