@@ -4,11 +4,13 @@ import nltk
 import codecs
 import re
 import urllib
+from connect import *
 from tinysegmenter import *
 from time import sleep
 
 # Function to read all lines into dict
 segmenter = TinySegmenter()
+
 
 def page_read(text_in):
     """ string ('file_name.txt') -> unicode string
@@ -20,6 +22,7 @@ def page_read(text_in):
     print "File Read."
     sleep(.5)
     return all_text
+
 
 def tokenize(all_read):
     """ list -> dict
@@ -35,39 +38,19 @@ def tokenize(all_read):
             order += 1
     return kanji
 
-def get_kanji_i_know():
-    """ none -> list
-    Loads a list of known words, so user can skip over them when selecting. Eliminates simple words.
-    """
-    stripped = []
-    t = codecs.open('tests/known_kanji.txt',encoding='UTF-8')
-    known = t.readlines()
-    for k in known:
-        stripped.append(k.strip())
-    t.close()
-    return stripped
-
-def write_new_kanji_i_know(kanji):
-    """ list -> none
-    takes a list of new kanji and adds them to the text file of kanji the user knows.
-    """
-    output = open('tests/known_kanji.txt', 'a')
-    for k in kanji:
-        output.write(k.encode('utf-8'))
-        output.write('\n')
-    output.close()
 
 def ask(all_found):
     """ dict -> dict
      takes all tokenized kanji and loops through, prompting user to lookup or not
     """
-    known = get_kanji_i_know()
+    known = get_known()
     new_known = []
     to_lookup = {}
     print "Processing."
     sleep(.5)
+#TODO not recognizing known kanji
 
-    for k,v in all_found.iteritems():
+    for k, v in all_found.iteritems():
         if k in known:
             print 'Known kanji: %s. Skipping.' % k
             sleep(.5)
@@ -78,8 +61,9 @@ def ask(all_found):
                 to_lookup[k] = {'order':v}
             elif need_lookup is 'n':
                 new_known.append(k)
-    write_new_kanji_i_know(new_known)
+    add_known(new_known)
     return to_lookup
+
 
 def look(l):
     """ dict -> dict
@@ -100,6 +84,7 @@ def look(l):
         l[k]['definition'] = condensed
     return l
 
+
 def condensed_def(definition):
     """string -> string
     removed secondary defs, condenses
@@ -110,6 +95,7 @@ def condensed_def(definition):
         end = definition.find('/(P)/')
         definition = definition[29:end]
     return definition
+
 
 def write_defs(k,t):
     """ dict, output file name -> none
@@ -124,6 +110,7 @@ def write_defs(k,t):
         output.write('\n')
     output.close()
     print 'お待たせいたしました。'
+
 
 def demo():
     write_defs(look(ask(tokenize(page_read('./tests/jtext.txt')))), './tests/output.txt')

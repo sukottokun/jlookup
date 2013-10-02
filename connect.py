@@ -6,10 +6,6 @@ import mysql.connector
 from mysql.connector import errorcode
 
 
-"""
-http://dev.mysql.com/doc/connector-python/en/connector-python-example-ddl.html
-http://dev.mysql.com/doc/connector-python/en/connector-python-reference.html
-"""
 def add_known(known_ji):
     """
     list->none
@@ -23,11 +19,16 @@ def add_known(known_ji):
             cursor.execute(add_ji_query)
             cnx.commit()
     except:
-        print "Error: unable to fecth data"
+        print "Error: unable to add data"
         cursor.close()
         cnx.close()
 
+
 def get_known():
+    """
+    list->none
+    Gets known Kanji from database.
+    """
     cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
     cursor = cnx.cursor()
     k = []
@@ -37,7 +38,6 @@ def get_known():
         cursor.execute(query)
         for (c) in cursor:
             k.append(c)
-            print c
             ji_count += 1
     except:
         print "Error: unable to fetch data"
@@ -45,6 +45,7 @@ def get_known():
         cnx.close()
 
     return k
+
 
 def demo():
     add_known(['test10','test13'])
