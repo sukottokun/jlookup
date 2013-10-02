@@ -26,7 +26,7 @@ TODOS:
 
 [ ] Review, edit known kanji
 
-[ ] IN PROGRESS: Use a database, make Japanese work
+[X] Use a database, make Japanese work
 
 [ ] Read a word doc as input
 
