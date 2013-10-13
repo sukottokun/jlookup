@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import nltk
 import codecs
 import re
 import urllib
-from connect import *
-from tinysegmenter import *
 from time import sleep
+
+import MySQLdb
+import mysql.connector
+from mysql.connector import errorcode
+
+import nltk
+from database_connect import uname,pw,host,db
+from tinysegmenter import *
 
 # Function to read all lines into dict
 segmenter = TinySegmenter()
@@ -48,6 +53,7 @@ def ask(all_found):
     to_lookup = {}
     print "Processing."
     sleep(.5)
+    print "Enter y/n to build list of kanji to look up."
 #TODO not recognizing known kanji
 
     for k, v in all_found.iteritems():
@@ -55,7 +61,7 @@ def ask(all_found):
             print 'Known kanji: %s. Skipping.' % k
             sleep(.5)
         else:
-            question = ''.join(["Lookup ", k.encode('utf-8'), "?\n"])
+            question = "Lookup %s?\n" % k.encode('utf-8')
             need_lookup = raw_input(question)
             if need_lookup is 'y':
                 to_lookup[k] = {'order':v}
@@ -110,6 +116,46 @@ def write_defs(k,t):
         output.write('\n')
     output.close()
     print 'お待たせいたしました。'
+
+def add_known(known_ji):
+    """
+    list->none
+    Takes the list of known kanji and inserts into database.
+    """
+    cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
+    cursor = cnx.cursor()
+    try:
+        for ji in known_ji:
+            add_ji_query = "INSERT INTO known (ji) VALUES ('%s')" % ji
+            cursor.execute(add_ji_query)
+            cnx.commit()
+    except:
+        print "Error: unable to add data"
+        cursor.close()
+        cnx.close()
+
+
+def get_known():
+    """
+    list->none
+    Gets known Kanji from database.
+    """
+    cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
+    cursor = cnx.cursor()
+    k = []
+    ji_count = 0
+    query = "SELECT ji FROM known"
+    try:
+        cursor.execute(query)
+        for (c) in cursor:
+            k.append(c)
+            ji_count += 1
+    except:
+        print "Error: unable to fetch data"
+        cursor.close()
+        cnx.close()
+
+    return k
 
 
 def demo():
