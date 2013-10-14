@@ -54,7 +54,6 @@ def ask(all_found):
     print "Processing."
     sleep(.5)
     print "Enter y/n to build list of kanji to look up."
-#TODO not recognizing known kanji
 
     for k, v in all_found.iteritems():
         if k in known:
@@ -67,7 +66,8 @@ def ask(all_found):
                 to_lookup[k] = {'order':v}
             elif need_lookup is 'n':
                 new_known.append(k)
-    add_known(new_known)
+                add_known(new_known)
+                print "Added to known database"
     return to_lookup
 
 
@@ -147,8 +147,9 @@ def get_known():
     query = "SELECT ji FROM known"
     try:
         cursor.execute(query)
-        for (c) in cursor:
-            k.append(c)
+        result = cursor.fetchall()
+        for (c) in result:
+            k.append(c[0])
             ji_count += 1
     except:
         print "Error: unable to fetch data"
