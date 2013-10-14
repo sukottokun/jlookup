@@ -14,7 +14,7 @@ TODOS:
 
 [ ] Return non-jisho kei verbs better
 
-[ ] Skip writing redundant exact matches
+[X] Skip writing redundant exact matches
 
 [ ] Show total tokens, show token progress
 
