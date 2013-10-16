@@ -10,18 +10,20 @@ This python script reads the article and using the most excellent Tiny Segmenter
 Pretty basic. At some point it might be nice to make furigana an option. But I pretty much learn the words, then go back and read the article when I am studying.
 
 TODOS:
-[ ] Return non-jisho kei verbs better
+
 
 [X] Skip writing redundant exact matches
 
 [X] Show total tokens, show token progress
 
+[X] Use a database, make Japanese work
+
 [ ] Step forward and back while building the search list
 
 [ ] Review, edit known kanji
 
-[X] Use a database, make Japanese work
-
 [ ] Read a word doc as input
 
 [ ] Maybe put on the web
+
+[ ] Return non-jisho kei verbs better
