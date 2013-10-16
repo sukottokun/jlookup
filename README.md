@@ -14,13 +14,9 @@ TODOS:
 
 [X] Skip writing redundant exact matches
 
-[ ] Show total tokens, show token progress
-
-[ ] Tiny segmenter alternatives?
+[X] Show total tokens, show token progress
 
 [ ] Step forward and back while building the search list
-
-[ ] Lookup hiragana too
 
 [ ] Review, edit known kanji
 
