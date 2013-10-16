@@ -1,6 +1,6 @@
-
 # test files
 tests*
 
 .idea*
 database_connect*
+*.pyc
