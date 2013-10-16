@@ -13,6 +13,9 @@ import nltk
 from database_connect import uname,pw,host,db
 from tinysegmenter import *
 
+cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
+cursor = cnx.cursor()
+
 # Function to read all lines into dict
 segmenter = TinySegmenter()
 
@@ -51,11 +54,13 @@ def ask(all_found):
     known = get_known()
     new_known = []
     to_lookup = {}
+    lookup_count = len(all_found.keys())
     print "Processing."
     sleep(.5)
     print "Enter y/n to build list of kanji to look up."
 
     for k, v in all_found.iteritems():
+        print "%s kanji remaining" % lookup_count
         if k in known:
             print 'Known kanji: %s. Skipping.' % k
             sleep(.5)
@@ -68,6 +73,7 @@ def ask(all_found):
                 new_known.append(k)
                 add_known(new_known)
                 print "Added to known database"
+        lookup_count -= 1
     return to_lookup
 
 
@@ -122,8 +128,6 @@ def add_known(known_ji):
     list->none
     Takes the list of known kanji and inserts into database.
     """
-    cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
-    cursor = cnx.cursor()
     try:
         for ji in known_ji:
             add_ji_query = "INSERT INTO known (ji) VALUES ('%s')" % ji
@@ -140,8 +144,6 @@ def get_known():
     list->none
     Gets known Kanji from database.
     """
-    cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
-    cursor = cnx.cursor()
     k = []
     ji_count = 0
     query = "SELECT ji FROM known"
