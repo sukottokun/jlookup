@@ -160,6 +160,10 @@ def get_known():
 
     return k
 
+def update_known:
+    """delete one, some or all items from table
+    """
+
 
 def demo():
     write_defs(look(ask(tokenize(page_read('./tests/jtext.txt')))), './tests/output.txt')
