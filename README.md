@@ -24,6 +24,6 @@ TODOS:
 
 [ ] Read a word doc as input
 
-[ ] Maybe put on the web
+[ ] Use local JDict
 
 [ ] Return non-jisho kei verbs better

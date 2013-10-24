@@ -4,3 +4,4 @@ tests*
 .idea*
 database_connect*
 *.pyc
+JMdict*
