@@ -12,6 +12,7 @@ from mysql.connector import errorcode
 import nltk
 from database_connect import uname,pw,host,db
 from tinysegmenter import *
+import kanji
 
 cnx = mysql.connector.connect(user=uname, password=pw, host=host, database=db)
 cursor = cnx.cursor()
@@ -68,7 +69,7 @@ def ask(all_found):
             question = "Lookup %s?\n" % k.encode('utf-8')
             need_lookup = raw_input(question)
             if need_lookup is 'y':
-                to_lookup[k] = {'order':v}
+                to_lookup[k] = {'order': v}
             elif need_lookup is 'n':
                 new_known.append(k)
                 add_known(new_known)
@@ -160,9 +161,10 @@ def get_known():
 
     return k
 
-def update_known:
+def update_known():
     """delete one, some or all items from table
     """
+    return True
 
 
 def demo():
